@@ -1,0 +1,307 @@
+local AIBot = Instance.new("ScreenGui")
+local Holder = Instance.new("Frame")
+local Holder2 = Instance.new("Frame")
+local MainBG = Instance.new("Frame")
+local Start = Instance.new("TextButton")
+local Reach = Instance.new("TextBox")
+local txtlbl = Instance.new("TextLabel")
+local ToolNameTB = Instance.new("TextBox")
+local txtlbl_2 = Instance.new("TextLabel")
+local BeamColor = Instance.new("TextBox")
+local txtlbl_3 = Instance.new("TextLabel")
+local PrintNames = Instance.new("TextButton")
+local Title = Instance.new("TextLabel")
+local WhitelistedTB = Instance.new("TextBox")
+local txtlbl_4 = Instance.new("TextLabel")
+local AddWhitelist = Instance.new("TextButton")
+
+local plr=game:GetService('Players').LocalPlayer
+local NameCheck=true
+local Whitelisted={}
+local Beam,Attach1,Attach2
+local ToolName="Foil" or nil
+local humanoid
+local torso
+local Attach1
+local Attach2
+local Beam
+local waypoints
+local path
+local target
+local player
+_G.H=false
+
+AIBot.Name = string.char(math.random(35,100)).."AIBot".. string.char(math.random(35,100))
+AIBot.Parent = game.CoreGui
+
+Holder.Name = "Holder"
+Holder.Parent = AIBot
+Holder.Active = true
+Holder.BackgroundColor3 = Color3.new(0, 0.666667, 1)
+Holder.BorderColor3 = Color3.new(0, 0.666667, 1)
+Holder.Position = UDim2.new(0.141162038, 0, 0.221729487, 0)
+Holder.Size = UDim2.new(0, 177, 0, 12)
+Holder.Draggable=true
+
+Holder2.Name = "Holder2"
+Holder2.Parent = Holder
+Holder2.Active = true
+Holder2.BackgroundColor3 = Color3.new(0, 0.278431, 0.419608)
+Holder2.BorderColor3 = Color3.new(0, 0.278431, 0.419608)
+Holder2.Position = UDim2.new(-0.000277971529, 0, 0.998336792, 0)
+Holder2.Size = UDim2.new(0, 177, 0, 7)
+
+MainBG.Name = "MainBG"
+MainBG.Parent = Holder2
+MainBG.Active = true
+MainBG.BackgroundColor3 = Color3.new(0.133333, 0.133333, 0.133333)
+MainBG.BorderColor3 = Color3.new(0.133333, 0.133333, 0.133333)
+MainBG.Position = UDim2.new(0, 0, 1, 0)
+MainBG.Size = UDim2.new(0, 177, 0, 264)
+
+Start.Name = "Start"
+Start.Parent = MainBG
+Start.BackgroundColor3 = Color3.new(0, 0.278431, 0.419608)
+Start.BorderColor3 = Color3.new(0, 0.278431, 0.419608)
+Start.Position = UDim2.new(0.107344627, 0, 0.799542546, 0)
+Start.Size = UDim2.new(0, 139, 0, 32)
+Start.Font = Enum.Font.Code
+Start.Text = "START"
+Start.TextColor3 = Color3.new(1, 1, 1)
+Start.TextScaled = true
+Start.TextSize = 14
+Start.TextWrapped = true
+
+Reach.Name = "Reach"
+Reach.Parent = MainBG
+Reach.BackgroundColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+Reach.BorderColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+Reach.Position = UDim2.new(0.395480216, 0, 0.658979416, 0)
+Reach.Size = UDim2.new(0, 20, 0, 22)
+Reach.Font = Enum.Font.SourceSans
+Reach.Text = "5"
+Reach.TextColor3 = Color3.new(1, 1, 1)
+Reach.TextSize = 14
+
+txtlbl.Name = "txtlbl"
+txtlbl.Parent = MainBG
+txtlbl.Active = true
+txtlbl.BackgroundColor3 = Color3.new(1, 1, 1)
+txtlbl.BackgroundTransparency = 1
+txtlbl.Position = UDim2.new(0.107344635, 0, 0.658979416, 0)
+txtlbl.Size = UDim2.new(0, 45, 0, 22)
+txtlbl.Font = Enum.Font.Code
+txtlbl.Text = "Reach:"
+txtlbl.TextColor3 = Color3.new(1, 1, 1)
+txtlbl.TextSize = 14
+txtlbl.TextXAlignment = Enum.TextXAlignment.Left
+
+ToolNameTB.Name = "ToolName"
+ToolNameTB.Parent = MainBG
+ToolNameTB.BackgroundColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+ToolNameTB.BorderColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+ToolNameTB.Position = UDim2.new(0.564971745, 0, 0.323253751, 0)
+ToolNameTB.Size = UDim2.new(0, 47, 0, 20)
+ToolNameTB.Font = Enum.Font.SourceSans
+ToolNameTB.Text = "Foil"
+ToolNameTB.TextColor3 = Color3.new(1, 1, 1)
+ToolNameTB.TextSize = 14
+
+txtlbl_2.Name = "txtlbl"
+txtlbl_2.Parent = MainBG
+txtlbl_2.Active = true
+txtlbl_2.BackgroundColor3 = Color3.new(1, 1, 1)
+txtlbl_2.BackgroundTransparency = 1
+txtlbl_2.Position = UDim2.new(0.107344642, 0, 0.323253751, 0)
+txtlbl_2.Size = UDim2.new(0, 65, 0, 20)
+txtlbl_2.Font = Enum.Font.Code
+txtlbl_2.Text = "Tool-Name:"
+txtlbl_2.TextColor3 = Color3.new(1, 1, 1)
+txtlbl_2.TextSize = 14
+txtlbl_2.TextXAlignment = Enum.TextXAlignment.Left
+
+BeamColor.Name = "BeamColor"
+BeamColor.Parent = MainBG
+BeamColor.BackgroundColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+BeamColor.BorderColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+BeamColor.Position = UDim2.new(0.564971745, 0, 0.504540265, 0)
+BeamColor.Size = UDim2.new(0, 47, 0, 20)
+BeamColor.Font = Enum.Font.SourceSans
+BeamColor.Text = "0,100,175"
+BeamColor.TextColor3 = Color3.fromRGB(0,100,175)
+BeamColor.TextSize = 14
+
+txtlbl_3.Name = "txtlbl"
+txtlbl_3.Parent = MainBG
+txtlbl_3.Active = true
+txtlbl_3.BackgroundColor3 = Color3.new(1, 1, 1)
+txtlbl_3.BackgroundTransparency = 1
+txtlbl_3.Position = UDim2.new(0.107344642, 0, 0.504540265, 0)
+txtlbl_3.Size = UDim2.new(0, 65, 0, 20)
+txtlbl_3.Font = Enum.Font.Code
+txtlbl_3.Text = "Beam-Color:"
+txtlbl_3.TextColor3 = Color3.new(1, 1, 1)
+txtlbl_3.TextSize = 14
+txtlbl_3.TextXAlignment = Enum.TextXAlignment.Left
+
+PrintNames.Name = "PrintNames"
+PrintNames.Parent = MainBG
+PrintNames.BackgroundColor3 = Color3.new(0, 0.278431, 0.419608)
+PrintNames.BorderColor3 = Color3.new(0, 0.278431, 0.419608)
+PrintNames.Position = UDim2.new(0.830508471, 0, 0.323253751, 0)
+PrintNames.Size = UDim2.new(0, 11, 0, 20)
+PrintNames.Font = Enum.Font.Code
+PrintNames.Text = "P"
+PrintNames.TextColor3 = Color3.new(1, 1, 1)
+PrintNames.TextSize = 14
+
+Title.Name = "Title"
+Title.Parent = MainBG
+Title.Active = true
+Title.BackgroundColor3 = Color3.new(1, 1, 1)
+Title.BackgroundTransparency = 1
+Title.Position = UDim2.new(0.316384166, 0, 0.0299043357, 0)
+Title.Size = UDim2.new(0, 65, 0, 16)
+Title.Font = Enum.Font.Code
+Title.Text = "MELEE-BOT"
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.TextSize = 14
+
+WhitelistedTB.Name = "Whitelisted"
+WhitelistedTB.Parent = MainBG
+WhitelistedTB.BackgroundColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+WhitelistedTB.BorderColor3 = Color3.new(0.219608, 0.219608, 0.219608)
+WhitelistedTB.Position = UDim2.new(0.564971745, 0, 0.149011314, 0)
+WhitelistedTB.Size = UDim2.new(0, 47, 0, 20)
+WhitelistedTB.Font = Enum.Font.SourceSans
+WhitelistedTB.Text = ""
+WhitelistedTB.TextColor3 = Color3.new(1, 1, 1)
+WhitelistedTB.TextSize = 14
+
+txtlbl_4.Name = "txtlbl"
+txtlbl_4.Parent = MainBG
+txtlbl_4.Active = true
+txtlbl_4.BackgroundColor3 = Color3.new(1, 1, 1)
+txtlbl_4.BackgroundTransparency = 1
+txtlbl_4.Position = UDim2.new(0.107344635, 0, 0.149011329, 0)
+txtlbl_4.Size = UDim2.new(0, 65, 0, 20)
+txtlbl_4.Font = Enum.Font.Code
+txtlbl_4.Text = "Whitelist:"
+txtlbl_4.TextColor3 = Color3.new(1, 1, 1)
+txtlbl_4.TextSize = 14
+txtlbl_4.TextXAlignment = Enum.TextXAlignment.Left
+
+AddWhitelist.Name = "AddWhitelist"
+AddWhitelist.Parent = MainBG
+AddWhitelist.BackgroundColor3 = Color3.new(0, 0.278431, 0.419608)
+AddWhitelist.BorderColor3 = Color3.new(0, 0.278431, 0.419608)
+AddWhitelist.Position = UDim2.new(0.830508471, 0, 0.149011314, 0)
+AddWhitelist.Size = UDim2.new(0, 11, 0, 20)
+AddWhitelist.Font = Enum.Font.Code
+AddWhitelist.Text = "+"
+AddWhitelist.TextColor3 = Color3.new(1, 1, 1)
+AddWhitelist.TextSize = 14
+ToolName=ToolNameTB.Text
+
+--<<Functions
+
+PrintNames.MouseButton1Down:Connect(function()
+    table.foreach(plr.Backpack:GetChildren(),print)
+end)
+
+AddWhitelist.MouseButton1Down:Connect(function()
+    table.insert(Whitelisted,WhitelistedTB.Text)
+end)
+
+BeamColor.Changed:Connect(function()
+    BeamColor.TextColor3 = Color3.fromRGB(BeamColor.Text:match("(%d+),(%d+),(%d+)"))
+end)
+
+ToolNameTB.Changed:Connect(function()
+	ToolName=ToolNameTB.Text
+	if plr.Backpack:FindFirstChild(ToolName) then
+		Reach.Text= plr.Backpack[ToolName].Handle.Size.Z
+	end
+end)
+
+Start.MouseButton1Down:Connect(function()
+    _G.H=not _G.H
+    humanoid = plr.Character:WaitForChild("Humanoid")
+    torso = plr.Character:WaitForChild("Torso")
+    if _G.H then
+        Start.Text="STOP"
+        humanoid.AutoRotate = false
+        Beam=Instance.new('Beam') Beam.Parent=torso
+        Attach1=Instance.new('Attachment')
+        Attach2=Instance.new('Attachment')
+        Attach1.Parent=torso
+        Beam.Attachment0=Attach1
+        Beam.Attachment1=Attach2
+        Beam.Color=ColorSequence.new(Color3.fromRGB(BeamColor.Text:match("(%d+),(%d+),(%d+)")),Color3.fromRGB(BeamColor.Text:match("(%d+),(%d+),(%d+)")))    
+    elseif not _G.H then
+        Start.Text="START"
+        humanoid.AutoRotate = true
+        if torso:FindFirstChild('Beam') then
+            torso:FindFirstChild('Beam'):Destroy()
+        end
+    end
+    function Found(group, text) if string.find(group, text) then return true  else return false  end end
+    local hroot = plr.Character:WaitForChild('HumanoidRootPart')
+    function FindNearest(position)
+        	local lowest = math.huge -- infinity
+        	local NearestPlayer = nil
+        	for i,v in pairs(game.Players:GetPlayers()) do
+        	    if v and v.Character and v.Name~=plr.Name and v.Character:FindFirstChild('Humanoid').Health>0 and not v.Character:FindFirstChild('Humanoid').Sit and v.Character.Torso.Position.Y<torso.Position.Y+30 and not Found(table.concat(Whitelisted),v.Name) then
+        	        local distance = v:DistanceFromCharacter(position)
+        	        if distance < lowest then
+        	            lowest = distance
+        	            NearestPlayer = v
+        	        end
+                end
+        	end
+        	return NearestPlayer
+        end	 
+    while _G.H do
+            humanoid.Died:Connect(function()
+                _G.H=false
+                repeat wait() until plr.Character ~= nil
+            end)
+            spawn(function()
+                player=FindNearest(hroot.Position)
+				if player then
+					target = player.Character.HumanoidRootPart
+					
+					plr.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame:lerp(CFrame.new(plr.Character.HumanoidRootPart.Position, target.Position), .1)					plr.Character.HumanoidRootPart.CFrame = CFrame.new(plr.Character.HumanoidRootPart.Position, Vector3.new(target.Position.X, plr.Character.HumanoidRootPart.Position.Y, target.Position.Z))
+					if plr.Backpack:FindFirstChild(ToolName) then print("Passed",plr.Backpack:FindFirstChild(ToolName).Handle.Size.Z) plr.Backpack:FindFirstChild(ToolName).Handle.Massless = true; plr.Backpack:FindFirstChild(ToolName).Handle.Size=Vector3.new(plr.Backpack[ToolName].Handle.Size.X,plr.Backpack[ToolName].Handle.Size.Y,Reach.Text or 5) plr.Backpack:FindFirstChild(ToolName).Parent=plr.Character end
+					if player.Character.Torso.Position.Y>torso.Position.Y+1 then
+						humanoid.Jump=true
+					end
+					if humanoid.Sit then
+						humanoid.Sit = not humanoid.Sit
+					end
+					if player.Character.Humanoid.Health>0 then
+						Attach2.Parent=player.Character.Torso
+					end
+					if path.Status == Enum.PathStatus.Success then
+						waypoints = path:GetWaypoints()
+						for i = 1, #waypoints do
+							local waypoint = waypoints[i]
+							if waypoint then
+								local destination = waypoint.Position
+								humanoid:MoveTo(destination)
+								if waypoint.Action == Enum.PathWaypointAction.Jump then
+									humanoid.Jump = true
+								end
+							end
+							local reached = humanoid.MoveToFinished:Wait()
+						end
+						if plr.Character:FindFirstChild(ToolName) ~= nil then
+							plr.Character:FindFirstChild(ToolName):Activate()
+						end
+					end
+				waypoints=path:GetWaypoints()
+			end
+        end)
+        game:GetService('RunService').RenderStepped:Wait()
+    end
+end)
